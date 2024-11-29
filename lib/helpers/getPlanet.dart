@@ -3,7 +3,7 @@ import 'package:parcial/entity/planet_entity.dart';
 import 'package:parcial/models/planet.dart';
 
 class GetPlanet {
-  static const url = "http://localhost:8080/api";
+  static const url = "https://apidragonball.onrender.com/api";
   final _dio = Dio();
 
   Future<List<PlanetEntity>> getPL() async {

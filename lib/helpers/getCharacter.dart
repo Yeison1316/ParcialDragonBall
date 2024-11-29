@@ -5,7 +5,7 @@ import 'package:parcial/entity/character_entity.dart';
 import 'package:parcial/models/character.dart';
 
 class GetCharacter {
-  static const url = "http://localhost:8080/api";
+  static const url = "https://apidragonball.onrender.com/api";
   final _dio = Dio();
 
   Future<CharacterEntity> getCharacterOnly(id) async {
