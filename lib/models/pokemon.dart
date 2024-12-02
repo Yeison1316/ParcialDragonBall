@@ -2,8 +2,9 @@ class Pokemon {
   final int id;
   final String name;
   final String image;
-  final List<Ability> abilities;
-  final List<Stats> stats;
+  final List<String>
+      abilities; // Aseguramos que las habilidades sean una lista de String
+  final List<Stat> stats;
 
   Pokemon({
     required this.id,
@@ -13,47 +14,32 @@ class Pokemon {
     required this.stats,
   });
 
-  // Convertir JSON a un objeto Pokemon
   factory Pokemon.fromJson(Map<String, dynamic> json) {
-    var abilitiesFromJson = json['abilities'] as List;
-    List<Ability> abilitiesList =
-        abilitiesFromJson.map((i) => Ability.fromJson(i)).toList();
-
-    var statsFromJson = json['stats'] as List;
-    List<Stats> statsList =
-        statsFromJson.map((i) => Stats.fromJson(i)).toList();
+    var abilitiesList = List<String>.from(
+        json['abilities']); // Habilidades como lista de Strings
+    var statsList =
+        (json['stats'] as List).map((stat) => Stat.fromJson(stat)).toList();
 
     return Pokemon(
       id: json['id'],
       name: json['name'],
-      image: json['sprites']['front_default'],
+      image: json['image'],
       abilities: abilitiesList,
       stats: statsList,
     );
   }
 }
 
-class Ability {
-  final String abilityName;
-
-  Ability({required this.abilityName});
-  factory Ability.fromJson(Map<String, dynamic> json) {
-    return Ability(
-      abilityName: json['ability']['name'],
-    );
-  }
-}
-
-class Stats {
-  final int baseStat;
+class Stat {
   final String statName;
+  final int baseStat;
 
-  Stats({required this.baseStat, required this.statName});
+  Stat({required this.statName, required this.baseStat});
 
-  factory Stats.fromJson(Map<String, dynamic> json) {
-    return Stats(
-      baseStat: json['base_stat'],
-      statName: json['stat']['name'],
+  factory Stat.fromJson(Map<String, dynamic> json) {
+    return Stat(
+      statName: json['statName'],
+      baseStat: json['baseStat'],
     );
   }
 }

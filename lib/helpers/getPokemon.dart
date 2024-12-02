@@ -4,34 +4,29 @@ import 'package:parcial/models/pokemon.dart';
 
 class GetPokemons {
   final Dio _dio = Dio();
-  static const String _baseUrl = 'https://pokeapi.co/api/v2/pokemon/';
+  static const String _baseUrl = 'https://apidragonball.onrender.com/api';
 
   Future<List<PokemonEntity>> getAllPokemons() async {
     List<PokemonEntity> allPokemons = [];
-    int limit = 30;
-    int offset = 0;
 
     try {
-      final response = await _dio.get("$_baseUrl?limit=$limit&offset=$offset");
+      final response = await _dio.get("$_baseUrl/pokemon");
       final results = response.data['results'] as List;
 
       for (var result in results) {
-        final pokemonName = result['name'];
-        final pokemonDetailsResponse = await _dio.get("$_baseUrl$pokemonName");
-
-        final pokemon = Pokemon.fromJson(pokemonDetailsResponse.data);
-
-        // Transforma las habilidades a List<String> y las estadísticas a List<Map<String, String>>
+        final pokemon = Pokemon.fromJson(result);
         allPokemons.add(PokemonEntity(
           id: pokemon.id,
           name: pokemon.name,
           image: pokemon.image,
-          abilities:
-              pokemon.abilities.map((ability) => ability.abilityName).toList(),
+          abilities: List<String>.from(
+              pokemon.abilities), // Aseguramos que sea una lista de String
           stats: pokemon.stats
-              .map((stat) =>
-                  {"statName": stat.statName, "baseStat": stat.baseStat})
-              .toList(),
+              .map((stat) => {
+                    "statName": stat.statName,
+                    "baseStat": stat.baseStat.toString(),
+                  })
+              .toList(), // Convertimos las estadísticas a un formato adecuado
         ));
       }
 
